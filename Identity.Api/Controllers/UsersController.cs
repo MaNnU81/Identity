@@ -1,5 +1,6 @@
 ﻿using Identity.Api.Interfaces;
 using Identity.Api.model;
+using Identity.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers
@@ -12,12 +13,15 @@ namespace Identity.Api.Controllers
 
 
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService)); ;
+            _userService = userService;
+            _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
 
@@ -39,7 +43,7 @@ namespace Identity.Api.Controllers
         {
             try
             {
-               
+
                 var userId = await _userService.CreateUser(userCreateModel);
 
                 if (userId == null)
@@ -54,7 +58,7 @@ namespace Identity.Api.Controllers
 
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -62,23 +66,69 @@ namespace Identity.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersByFilter([FromQuery] UsersFilterModel filter)
         {
-            
+
 
             List<UserViewModel> result = await _userService.GetUsersByFilter(filter);
 
             if (result == null || !result.Any())
             {
-                
+
                 return NoContent();
             }
             else
             {
-               
+
                 return Ok(result);
             }
         }
 
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsersById([FromRoute] int id)
+        {
+            var chirp = await _userService.GetUsersById(id);
+
+            if (chirp == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(chirp);
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutChirp([FromRoute] int id, [FromBody] UsersUpdateModel user)
+        {
+            var result = await _userService.UpdateUser(id, user);
+
+            if (result == false)
+            {
+                return BadRequest("Users non esistente!");
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            int? result = await _userService.DeleteUser(id);
+
+            if (result == null)
+            {
+                return BadRequest("Chirp non esistente!");
+            }
+            if (result == -1)
+            {
+                return BadRequest("Attenzione eliminare prima tutti i commenti associati alla Chirp!");
+            }
+
+            return Ok(result);
+        }
 
     }
 }

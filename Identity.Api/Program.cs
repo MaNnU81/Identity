@@ -4,6 +4,7 @@ using Identity.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace Identity.Api
 {
@@ -27,7 +28,13 @@ namespace Identity.Api
 
             builder.Services.AddControllers();
 
-         
+            Log.Logger = new LoggerConfiguration()
+                                .ReadFrom.Configuration(builder.Configuration)
+                                .CreateLogger();
+
+            builder.Host.UseSerilog();
+
+
 
             builder.Services.AddSwaggerGen(options =>
             {

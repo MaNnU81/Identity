@@ -9,16 +9,16 @@ namespace Identity.Api.Services
     public class UserService : IUserService
     {
 
-        private readonly  IdentityContext _identityContext;
+        private readonly IdentityContext _identityContext;
         public UserService(IdentityContext identityContext)
         {
-            _identityContext =  identityContext;
+            _identityContext = identityContext;
         }
 
 
         // Example method to demonstrate functionality      
 
-       
+
         public async Task<List<UserViewModel>> GetAllUsers()
         {
 
@@ -26,7 +26,7 @@ namespace Identity.Api.Services
                 .Select(user => new UserViewModel
                 {
                     Id = user.Id,
-                    FirtName = user.FirtName,
+                    FirstName = user.FirstName,
                     SecondName = user.SecondName,
                     Password = user.Password,
                     Email = user.Email
@@ -40,8 +40,8 @@ namespace Identity.Api.Services
 
             var user = new User
             {
-                
-                FirtName = userCreateModel.FirtName,
+
+                FirstName = userCreateModel.FirstName,
                 SecondName = userCreateModel.SecondName,
                 Password = userCreateModel.Password,
                 Email = userCreateModel.Email
@@ -69,19 +69,81 @@ namespace Identity.Api.Services
 
             var result = await query.Select(x => new UserViewModel
             {
-                Id = x.Id,
-                FirtName = x.FirtName,
+
+                FirstName = x.FirstName,
                 SecondName = x.SecondName,
-                Password = x.Password,
-                Email = x.Email
             }).ToListAsync();
 
             return result;
+        }
 
+        public async Task<UserViewModel> GetUsersById(int id)
+        {
+            var entity = await _identityContext.Users.FindAsync(id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+            return new UserViewModel
+            {
+                Id = entity.Id,
+                FirstName = entity.FirstName,
+                SecondName = entity.SecondName,
+                Password = entity.Password,
+                Email = entity.Email
+            };
         }
 
 
 
+
+
+        public async Task<bool> UpdateUser(int id, UsersUpdateModel user)
+        {
+            var entity = await _identityContext.Users.FindAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.FirstName))
+                entity.FirstName = user.FirstName;
+
+            if (!string.IsNullOrWhiteSpace(user.SecondName))
+                entity.SecondName = user.SecondName;
+
+            if (!string.IsNullOrWhiteSpace(user.Password))
+                entity.Password = user.Password;
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+                entity.Email = user.Email;
+
+
+            _identityContext.Entry(entity).State = EntityState.Modified;
+            await _identityContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<int?> DeleteUser(int id)
+        {
+            User? entity = await _identityContext.Users.FirstOrDefaultAsync();
+
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            _identityContext.Users.Remove(entity);
+            await _identityContext.SaveChangesAsync();
+
+            return id;
+        }
     }
 
 }
+
+
+
