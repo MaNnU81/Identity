@@ -1,6 +1,6 @@
-﻿using Identity.Api.model;
+﻿using Identity.Api.model.DTOs;
 
-namespace Identity.Api.Interfaces
+namespace Identity.Api.Services.Interfaces
 {
     public interface IUserService
     {

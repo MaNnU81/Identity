@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.model
+﻿namespace Identity.Api.model.DTOs
 {
     public class UsersFilterModel
     {

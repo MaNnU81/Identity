@@ -1,9 +1,9 @@
-﻿namespace Identity.Api.model
+﻿namespace Identity.Api.model.DTOs
 {
-    public class UsersUpdateModel
+    public class UserCreateModel
     {
 
- 
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string Password { get; set; }

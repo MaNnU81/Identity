@@ -1,7 +1,7 @@
 ﻿using System;
 using identity.service.model;
-using Identity.Api.Interfaces;
-using Identity.Api.model;
+using Identity.Api.model.DTOs;
+using Identity.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Api.Services

@@ -1,6 +1,6 @@
-﻿using Identity.Api.Interfaces;
-using Identity.Api.model;
+﻿using Identity.Api.model.DTOs;
 using Identity.Api.Services;
+using Identity.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers

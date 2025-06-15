@@ -1,6 +1,6 @@
 using identity.service.model;
-using Identity.Api.Interfaces;
 using Identity.Api.Services;
+using Identity.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -21,9 +21,10 @@ namespace Identity.Api
             builder.Services.AddControllers();
 
             builder.Services.AddScoped<IUserService, UserService>();
-            
+            builder.Services.AddScoped<IRequestService, RequestService>();
 
-         
+
+
 
 
             builder.Services.AddControllers();
