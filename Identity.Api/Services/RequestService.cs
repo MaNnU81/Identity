@@ -140,5 +140,46 @@ namespace Identity.Api.Services
             }
         }
 
+        public async Task<RequestViewModel?> GetRequestById(int id)
+        {
+            try
+            {
+                var request = await _identityContext.Requests
+                    .Where(r => r.Id == id)
+                    .Select(r => new RequestViewModel
+                    {
+                        Id = r.Id,
+                        Text = r.Text,
+                        CreatedAt = r.CreatedAt,
+                        ExecutedAt = r.ExecutedAt,
+                        Success = r.Success,
+                        UserId = r.UserId
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (request == null)
+                {
+                   
+                    return null;
+                }
+
+                // Conversione DateTime per consistency (se necessario)
+                if (request.ExecutedAt.HasValue)
+                {
+                    request.ExecutedAt = request.ExecutedAt.Value.Kind == DateTimeKind.Unspecified
+                        ? DateTime.SpecifyKind(request.ExecutedAt.Value, DateTimeKind.Utc)
+                        : request.ExecutedAt.Value.ToUniversalTime();
+                }
+
+               
+                return request;
+            }
+            catch (Exception ex)
+            {
+               
+                return null;
+            }
+        }
+
     }
 }

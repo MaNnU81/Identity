@@ -87,5 +87,21 @@ namespace Identity.Api.Controllers
                     Solution = "Verify the request exists and is not referenced by other entities"
                 });
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRequestById([FromRoute] int id)
+        {
+            _logger.LogInformation("Fetching request with ID {RequestId}", id);
+
+            var request = await _requestService.GetRequestById(id);
+
+            return request != null
+                ? Ok(request)
+                : NotFound(new
+                {
+                    Message = $"Request with ID {id} not found",
+                    Solution = "Verify the request exists in the database"
+                });
+        }
     }
 }
