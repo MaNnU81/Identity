@@ -127,6 +127,37 @@ namespace Identity.Api.Services
             }
         }
 
+        public async Task<RoleViewModel?> GetRoleByUserId(int id)
+        {
+            try
+            {
+                var role = await _identityContext.Roles
+                    .Where(r => r.Id == id)
+                    .Select(r => new RoleViewModel
+                    {
+                        Id = r.Id,
+                        Code = r.Code,
+                        Description = r.Description
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (role == null)
+                {
+
+                    return null;
+                }
+
+
+
+                return role;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+
     }
 
 }

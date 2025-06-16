@@ -10,6 +10,8 @@ namespace Identity.Api.Services.Interfaces
         Task<bool> DeleteRole(int id);
 
         Task<List<RoleViewModel>> GetAllRoles();
+        
+        Task<RoleViewModel?> GetRoleByUserId(int id);
         Task<bool> UpdateRole(int id, RoleUpdateModel model);
        
     }
