@@ -127,7 +127,7 @@ namespace Identity.Api.Services
             }
         }
 
-        public async Task<RoleViewModel?> GetRoleByUserId(int id)
+        public async Task<RoleViewModel?> GetRoleById(int id)
         {
             try
             {

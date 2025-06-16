@@ -11,7 +11,7 @@ namespace Identity.Api.Services.Interfaces
 
         Task<List<RoleViewModel>> GetAllRoles();
         
-        Task<RoleViewModel?> GetRoleByUserId(int id);
+        Task<RoleViewModel?> GetRoleById(int id);
         Task<bool> UpdateRole(int id, RoleUpdateModel model);
        
     }

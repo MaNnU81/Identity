@@ -88,11 +88,11 @@ namespace Identity.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoleByUserId([FromRoute] int id)
+        public async Task<IActionResult> GetRoleById([FromRoute] int id)
         {
             _logger.LogInformation("Fetching role with ID {RoleId}", id);
 
-            var role = await _roleService.GetRoleByUserId(id);
+            var role = await _roleService.GetRoleById(id);
 
             return role != null
                 ? Ok(role)
