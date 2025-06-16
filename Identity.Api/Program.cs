@@ -22,6 +22,7 @@ namespace Identity.Api
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRequestService, RequestService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
 
 

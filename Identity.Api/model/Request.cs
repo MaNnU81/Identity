@@ -1,4 +1,6 @@
-﻿namespace Identity.Api.model
+﻿using identity.service.model;
+
+namespace Identity.Api.model
 {
     public class Request
     {
@@ -11,7 +13,7 @@
 
         public int UserId { get; set; }
 
-
+        public virtual User User { get; set; }
 
     }
 }

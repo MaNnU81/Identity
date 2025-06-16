@@ -15,8 +15,9 @@ namespace identity.service.model
 
         public DbSet<User> Users { get; set; }
         public DbSet<Request> Requests { get; set; } = null!;
+        public DbSet<Role> Roles { get; set; } = null!;
 
-        public IdentityContext(DbContextOptions<IdentityContext> options): base(options)
+        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
         }
 
@@ -29,7 +30,7 @@ namespace identity.service.model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configurazione User - GIÀ CORRETTA
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("users");
@@ -42,11 +43,11 @@ namespace identity.service.model
                 entity.Property(u => u.Email).HasColumnName("email");
             });
 
-            // Configurazione Request - MODIFICATA PER CONSISTENZA
+
             modelBuilder.Entity<Request>(entity =>
             {
                 entity.ToTable("requests");
-                entity.HasKey(r => r.Id).HasName("pk_requests"); // Consistent naming
+                entity.HasKey(r => r.Id).HasName("pk_requests");
 
                 entity.Property(r => r.Id).HasColumnName("id");
                 entity.Property(r => r.Text)
@@ -73,14 +74,44 @@ namespace identity.service.model
                     .IsRequired();
 
                 entity.HasIndex(r => r.Id)
-                    .HasDatabaseName("ix_requests_id"); // Naming convention consistente
+                    .HasDatabaseName("ix_requests_id");
 
                 entity.HasOne<User>()
                     .WithMany(u => u.Requests)
                     .HasForeignKey(r => r.UserId)
-                    .HasConstraintName("fk_requests_users") // Consistent FK naming
+                    .HasConstraintName("fk_requests_users")
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("roles");
+                entity.HasKey(r => r.Id).HasName("pk_roles");
+                entity.Property(r => r.Id).HasColumnName("id");
+                entity.Property(r => r.Code).HasColumnName("code").IsRequired().HasMaxLength(20);
+                entity.Property(r => r.Description).HasColumnName("description").IsRequired().HasMaxLength(50);
+            });
+
+
+            modelBuilder.Entity<UserRole>( entity =>
+            {
+                entity.ToTable("user_roles");
+                entity.HasKey(ur => new { ur.UserId, ur.RoleId }).HasName("pk_user_roles");
+                entity.Property(ur => ur.UserId).HasColumnName("user_id");
+                entity.Property(ur => ur.RoleId).HasColumnName("role_id");
+                entity.HasOne<User>()
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .HasConstraintName("fk_user_roles_users")
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<Role>()
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .HasConstraintName("fk_user_roles_roles")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
 
 

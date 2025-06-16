@@ -15,6 +15,10 @@ namespace identity.service.model
         public string Password { get; set; }
         public string Email { get; set; }
 
-        public ICollection<Request> Requests { get; set; } = new List<Request>();
+        public virtual ICollection<Request> Requests { get; set; } 
+       
+
+        public virtual ICollection<UserRole> UserRoles { get; set; } 
+
     }
 }
